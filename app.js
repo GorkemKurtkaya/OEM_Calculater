@@ -1,3 +1,7 @@
+//EN SON ÜRÜN GÜNCELLEME DE KALDIM
+
+
+
 //Storage Controller
 const StorageController = (function () {
 

@@ -77,12 +77,15 @@ const UIController = (function () {
     const Selectors = {
         productList: '#item-list',
         addButton: '.addBtn',
+        updateButton: '.updateBtn',
+        deleteButton: '.deleteBtn',
+        cancelButton: '.cancelBtn',
         productName: '#productName',
         productPrice: '#productPrice',
         productCard: '#productCard',
         totalTl: '#total-tl',
         totalDolar: '#total-dolar',
-        editBtn: '#editBtn',
+        
 
     }
 
@@ -144,6 +147,28 @@ const UIController = (function () {
             const selectedProduct = ProductController.getCurrentProduct();
             document.querySelector(Selectors.productName).value = selectedProduct.name;
             document.querySelector(Selectors.productPrice).value = selectedProduct.price;   
+        },
+        addingState: function () {
+            UIController.clearInputs();
+            document.querySelector(Selectors.addButton).style.display = 'inline';
+            document.querySelector(Selectors.updateButton).style.display = 'none';
+            document.querySelector(Selectors.deleteButton).style.display = 'none';
+            document.querySelector(Selectors.cancelButton).style.display = 'none';
+        },
+        editState: function (tr) {
+
+            const paretn=tr.parentNode;
+
+            for(let i=0;i<paretn.children.length;i++){
+                paretn.children[i].classList.remove('bg-warning');
+            }
+
+
+            tr.classList.add('bg-warning');
+            document.querySelector(Selectors.addButton).style.display = 'none';
+            document.querySelector(Selectors.updateButton).style.display = 'inline';
+            document.querySelector(Selectors.deleteButton).style.display = 'inline';
+            document.querySelector(Selectors.cancelButton).style.display = 'inline';
         }
 
     }
@@ -203,6 +228,8 @@ const App = (function (StorageController, ProductController, UIController) {
 
             //add product to UI
             UIController.addProductToForm(product);
+
+            UIController.editState(e.target.parentNode.parentNode);
         }
 
         e.preventDefault();
@@ -210,6 +237,7 @@ const App = (function (StorageController, ProductController, UIController) {
 
     return {
         init: function () {
+            UIController.addingState();
             console.log('App is started');
             const products = ProductController.getProduct();
             if (products.length == 0) {
